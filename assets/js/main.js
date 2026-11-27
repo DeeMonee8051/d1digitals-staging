@@ -1,4 +1,17 @@
 (function () {
+
+  /* If a WebP file is missing (e.g. a raw Git host with only .b64 encodings), load the encoding. */
+  document.querySelectorAll("img").forEach(function (img) {
+    var src = img.getAttribute("src") || "";
+    if (!/\.webp$/i.test(src)) return;
+    function useB64() {
+      fetch(src + ".b64").then(function (r) { return r.ok ? r.text() : Promise.reject(); })
+        .then(function (text) {
+          img.src = "data:image/webp;base64," + text.replace(/\s+/g, "");
+        }).catch(function () {});
+    }
+    img.addEventListener("error", useB64, { once: true });
+  });
   var header = document.querySelector(".site-header");
   var toggle = document.querySelector(".nav-toggle");
   if (toggle && header) {
@@ -131,6 +144,19 @@
           }
         })
         .catch(function () {
+
+  /* If a WebP file is missing (e.g. a raw Git host with only .b64 encodings), load the encoding. */
+  document.querySelectorAll("img").forEach(function (img) {
+    var src = img.getAttribute("src") || "";
+    if (!/\.webp$/i.test(src)) return;
+    function useB64() {
+      fetch(src + ".b64").then(function (r) { return r.ok ? r.text() : Promise.reject(); })
+        .then(function (text) {
+          img.src = "data:image/webp;base64," + text.replace(/\s+/g, "");
+        }).catch(function () {});
+    }
+    img.addEventListener("error", useB64, { once: true });
+  });
           if (success) {
             success.classList.add("is-visible");
             success.textContent = "We could not reach the email list just now. You can write to hello@d1digitals.com instead.";
@@ -182,6 +208,19 @@
           }
         })
         .catch(function () {
+
+  /* If a WebP file is missing (e.g. a raw Git host with only .b64 encodings), load the encoding. */
+  document.querySelectorAll("img").forEach(function (img) {
+    var src = img.getAttribute("src") || "";
+    if (!/\.webp$/i.test(src)) return;
+    function useB64() {
+      fetch(src + ".b64").then(function (r) { return r.ok ? r.text() : Promise.reject(); })
+        .then(function (text) {
+          img.src = "data:image/webp;base64," + text.replace(/\s+/g, "");
+        }).catch(function () {});
+    }
+    img.addEventListener("error", useB64, { once: true });
+  });
           window.location.href = "mailto:hello@d1digitals.com?subject=" +
             encodeURIComponent("D1 Digitals website message");
         })
