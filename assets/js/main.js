@@ -1,16 +1,20 @@
 (function () {
 
-  /* If a WebP file is missing (e.g. a raw Git host with only .b64 encodings), load the encoding. */
+  /* GitHub Pages currently has .webp.b64 encodings (binaries could not be pushed via the connector). Load those first on github.io to avoid 404s. Local previews keep the real WebP files. */
   document.querySelectorAll("img").forEach(function (img) {
     var src = img.getAttribute("src") || "";
     if (!/\.webp$/i.test(src)) return;
     function useB64() {
-      fetch(src + ".b64").then(function (r) { return r.ok ? r.text() : Promise.reject(); })
+      return fetch(src + ".b64").then(function (r) { return r.ok ? r.text() : Promise.reject(); })
         .then(function (text) {
           img.src = "data:image/webp;base64," + text.replace(/\s+/g, "");
-        }).catch(function () {});
+        });
     }
-    img.addEventListener("error", useB64, { once: true });
+    if (/\.github\.io$/i.test(location.hostname)) {
+      useB64().catch(function () {});
+    } else {
+      img.addEventListener("error", function () { useB64().catch(function () {}); }, { once: true });
+    }
   });
   var header = document.querySelector(".site-header");
   var toggle = document.querySelector(".nav-toggle");
@@ -145,17 +149,21 @@
         })
         .catch(function () {
 
-  /* If a WebP file is missing (e.g. a raw Git host with only .b64 encodings), load the encoding. */
+  /* GitHub Pages currently has .webp.b64 encodings (binaries could not be pushed via the connector). Load those first on github.io to avoid 404s. Local previews keep the real WebP files. */
   document.querySelectorAll("img").forEach(function (img) {
     var src = img.getAttribute("src") || "";
     if (!/\.webp$/i.test(src)) return;
     function useB64() {
-      fetch(src + ".b64").then(function (r) { return r.ok ? r.text() : Promise.reject(); })
+      return fetch(src + ".b64").then(function (r) { return r.ok ? r.text() : Promise.reject(); })
         .then(function (text) {
           img.src = "data:image/webp;base64," + text.replace(/\s+/g, "");
-        }).catch(function () {});
+        });
     }
-    img.addEventListener("error", useB64, { once: true });
+    if (/\.github\.io$/i.test(location.hostname)) {
+      useB64().catch(function () {});
+    } else {
+      img.addEventListener("error", function () { useB64().catch(function () {}); }, { once: true });
+    }
   });
           if (success) {
             success.classList.add("is-visible");
@@ -209,17 +217,21 @@
         })
         .catch(function () {
 
-  /* If a WebP file is missing (e.g. a raw Git host with only .b64 encodings), load the encoding. */
+  /* GitHub Pages currently has .webp.b64 encodings (binaries could not be pushed via the connector). Load those first on github.io to avoid 404s. Local previews keep the real WebP files. */
   document.querySelectorAll("img").forEach(function (img) {
     var src = img.getAttribute("src") || "";
     if (!/\.webp$/i.test(src)) return;
     function useB64() {
-      fetch(src + ".b64").then(function (r) { return r.ok ? r.text() : Promise.reject(); })
+      return fetch(src + ".b64").then(function (r) { return r.ok ? r.text() : Promise.reject(); })
         .then(function (text) {
           img.src = "data:image/webp;base64," + text.replace(/\s+/g, "");
-        }).catch(function () {});
+        });
     }
-    img.addEventListener("error", useB64, { once: true });
+    if (/\.github\.io$/i.test(location.hostname)) {
+      useB64().catch(function () {});
+    } else {
+      img.addEventListener("error", function () { useB64().catch(function () {}); }, { once: true });
+    }
   });
           window.location.href = "mailto:hello@d1digitals.com?subject=" +
             encodeURIComponent("D1 Digitals website message");

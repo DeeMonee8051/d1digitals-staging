@@ -925,3 +925,11 @@ details[open] summary::after { content: "–"; }
   .hero-grid { grid-template-columns: 1fr; }
   .hero-photo { order: 2; margin-top: 1.5rem; }
 }
+
+/* Footer secondary text must stay AA on the dark footer, not inherit header muted grey */
+.site-footer .logo-text span {
+  color: #C9D1CB;
+  text-transform: none;
+  letter-spacing: 0.04em;
+  font-size: 13px;
+}
