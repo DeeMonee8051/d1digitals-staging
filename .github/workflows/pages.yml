@@ -4,31 +4,48 @@ on:
     branches: [main]
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 concurrency:
   group: pages
   cancel-in-progress: true
 jobs:
-  deploy:
+  prepare:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - name: Decode WebP images
+      - name: Decode WebP images and commit if missing
         run: |
           python3 - <<'PY'
           from pathlib import Path
           import base64
           d = Path("assets/img")
+          d.mkdir(parents=True, exist_ok=True)
           for p in d.glob("*.webp.b64"):
               dest = p.with_name(p.name[:-4])
-              dest.write_bytes(base64.b64decode(p.read_text()))
+              if not dest.exists():
+                  dest.write_bytes(base64.b64decode(p.read_text()))
               print(dest, dest.stat().st_size)
           PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/img/*.webp
+          if git diff --cached --quiet; then
+            echo "No new WebP files to commit"
+          else
+            git commit -m "Add decoded WebP images for staging"
+            git push
+          fi
+  deploy:
+    needs: prepare
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
